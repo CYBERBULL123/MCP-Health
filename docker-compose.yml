@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  healthcare-mcp:
+    build: .
+    container_name: healthcare-mcp
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - healthcare_models:/root/.cache/huggingface/hub
+      - healthcare_data:/app/instance
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  healthcare_models:
+    name: healthcare_models
+  healthcare_data:
+    name: healthcare_data

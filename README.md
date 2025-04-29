@@ -186,10 +186,32 @@ For inline documentation of the codebase:
 ## Docker Deployment
 
 ### Prerequisites
-- Docker installed on your system
+- Docker and Docker Compose installed on your system
 - Google Gemini API key
 
-### Building the Docker Image
+### Using Docker Compose (Recommended)
+1. Create a `.env` file with your credentials:
+   ```
+   GOOGLE_API_KEY=your-gemini-api-key
+   SECRET_KEY=your-flask-secret-key
+   ```
+
+2. Start the services:
+   ```bash
+   docker-compose up -d
+   ```
+
+3. View logs:
+   ```bash
+   docker-compose logs -f
+   ```
+
+4. Stop the services:
+   ```bash
+   docker-compose down
+   ```
+
+### Alternative: Using Docker CLI
 ```bash
 docker build -t healthcare-mcp .
 ```
