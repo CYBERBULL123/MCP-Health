@@ -473,6 +473,46 @@ def index():
     """Home page route."""
     return render_template('index.html')
 
+@app.route('/add_medical_note/<int:patient_id>', methods=['POST'])
+@login_required
+def add_medical_note(patient_id):
+    """
+    Add a new medical note to patient history.
+    Only accessible by doctors.
+    """
+    if current_user.role != 'doctor':
+        flash('Unauthorized access', 'danger')
+        return redirect(url_for('dashboard'))
+    
+    patient = Patient.query.get_or_404(patient_id)
+    note = request.form.get('note')
+    
+    if note:
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
+        doctor = Doctor.query.filter_by(user_id=current_user.id).first()
+        new_note = f"[{timestamp}] Dr. {doctor.name}: {note}"
+        
+        if patient.medical_history:
+            patient.medical_history = new_note + "\n" + patient.medical_history
+        else:
+            patient.medical_history = new_note
+        
+        db.session.commit()
+        flash('Medical note added successfully', 'success')
+    
+    return redirect(url_for('medical_history', patient_id=patient_id))
+
+@app.route('/logout')
+@login_required
+def logout():
+    """
+    User logout route.
+    Logs out the current user and redirects to login page.
+    """
+    logout_user()
+    flash('You have been logged out successfully.', 'success')
+    return redirect(url_for('login'))
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Medical History - Healthcare MCP{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Medical History</h3>
+                </div>
+                <div class="card-body">
+                    {% if patient %}
+                        <div class="patient-info mb-4">
+                            <h4>Patient Information</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Name:</strong> {{ patient.name }}</p>
+                                    <p><strong>Date of Birth:</strong> {{ patient.dob.strftime('%Y-%m-%d') }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="medical-records mb-4">
+                            <h4>Medical Records</h4>
+                            {% if patient.medical_history %}
+                                <div class="history-entries">
+                                    {% for entry in patient.medical_history.split('\n') %}
+                                        <div class="history-entry card mb-3">
+                                            <div class="card-body">
+                                                {{ entry }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p class="text-muted">No medical history records available.</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="appointments-history mb-4">
+                            <h4>Past Appointments</h4>
+                            {% if patient.appointments %}
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Doctor</th>
+                                                <th>Notes</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for appointment in patient.appointments|sort(attribute='datetime', reverse=true) %}
+                                                <tr>
+                                                    <td>{{ appointment.datetime.strftime('%Y-%m-%d %H:%M') }}</td>
+                                                    <td>{{ appointment.doctor.name }}</td>
+                                                    <td>{{ appointment.notes or 'No notes available' }}</td>
+                                                    <td><span class="badge bg-{{ 'success' if appointment.status == 'completed' else 'warning' if appointment.status == 'scheduled' else 'secondary' }}">{{ appointment.status }}</span></td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <p class="text-muted">No past appointments found.</p>
+                            {% endif %}
+                        </div>
+
+                        {% if current_user.role == 'doctor' %}
+                            <div class="add-note mb-4">
+                                <h4>Add Medical Note</h4>
+                                <form action="{{ url_for('add_medical_note', patient_id=patient.id) }}" method="POST">
+                                    <div class="mb-3">
+                                        <label for="note" class="form-label">Medical Note</label>
+                                        <textarea class="form-control" id="note" name="note" rows="3" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Add Note</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-warning">
+                            Patient record not found.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Enable Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+});
+</script>
+{% endblock %}
