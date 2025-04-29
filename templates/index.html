@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - Healthcare MCP{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-4 mb-4">Welcome to Healthcare MCP</h1>
+    <p class="lead mb-4">An intelligent healthcare management system powered by Google's Gemini AI</p>
+    
+    {% if not current_user.is_authenticated %}
+    <div class="mb-4">
+        <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg mx-2">Login</a>
+        <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg mx-2">Register</a>
+    </div>
+    {% endif %}
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Smart Appointments</h5>
+                <p class="card-text">Schedule and manage appointments with AI-powered scheduling optimization.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">AI Symptom Analysis</h5>
+                <p class="card-text">Get instant analysis of symptoms using advanced AI technology.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Medical History</h5>
+                <p class="card-text">Securely store and access your complete medical history.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

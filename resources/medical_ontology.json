@@ -1,0 +1,57 @@
+{
+    "symptom_categories": {
+        "cardiovascular": ["chest pain", "palpitations", "shortness of breath", "edema"],
+        "respiratory": ["cough", "wheezing", "dyspnea", "sputum production"],
+        "gastrointestinal": ["abdominal pain", "nausea", "vomiting", "diarrhea"],
+        "neurological": ["headache", "dizziness", "seizures", "weakness"],
+        "musculoskeletal": ["joint pain", "muscle pain", "stiffness", "swelling"]
+    },
+    "disease_classifications": {
+        "acute": {
+            "definition": "Sudden onset, short duration",
+            "typical_duration": "< 3 months",
+            "follow_up_frequency": "weekly"
+        },
+        "chronic": {
+            "definition": "Long-term, persistent condition",
+            "typical_duration": "> 3 months",
+            "follow_up_frequency": "monthly"
+        },
+        "emergency": {
+            "definition": "Requires immediate medical attention",
+            "response_time": "immediate",
+            "follow_up_frequency": "daily"
+        }
+    },
+    "treatment_protocols": {
+        "medication": {
+            "types": ["oral", "intravenous", "topical", "inhaled"],
+            "frequency_options": ["once daily", "twice daily", "three times daily", "as needed"],
+            "duration_units": ["days", "weeks", "months", "continuous"]
+        },
+        "therapy": {
+            "types": ["physical", "occupational", "speech", "psychological"],
+            "settings": ["inpatient", "outpatient", "home-based"],
+            "frequency": ["daily", "weekly", "biweekly", "monthly"]
+        },
+        "preventive": {
+            "screenings": ["annual", "biannual", "risk-based"],
+            "vaccinations": ["scheduled", "seasonal", "risk-based"],
+            "lifestyle": ["diet", "exercise", "stress management"]
+        }
+    },
+    "risk_levels": {
+        "low": {
+            "follow_up": "routine",
+            "monitoring": "standard"
+        },
+        "moderate": {
+            "follow_up": "increased frequency",
+            "monitoring": "enhanced"
+        },
+        "high": {
+            "follow_up": "intensive",
+            "monitoring": "continuous"
+        }
+    }
+}

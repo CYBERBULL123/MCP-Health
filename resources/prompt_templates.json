@@ -1,0 +1,71 @@
+{
+    "diagnosis": {
+        "symptom_analysis": {
+            "template": "As a medical professional, analyze the following symptoms:\n{symptoms}\n\nPatient Context:\n{context}\n\nProvide:\n1. Potential diagnoses (with confidence levels)\n2. Recommended diagnostic tests\n3. Urgency assessment\n4. Immediate recommendations",
+            "examples": [
+                {
+                    "symptoms": "fever, cough, fatigue",
+                    "context": "35-year-old patient, no underlying conditions",
+                    "response": "structured medical analysis following the template"
+                }
+            ]
+        },
+        "differential_diagnosis": {
+            "template": "Given the following findings:\nSymptoms: {symptoms}\nVital Signs: {vitals}\nMedical History: {history}\n\nProvide a differential diagnosis with:\n1. Most likely conditions\n2. Red flags to consider\n3. Required investigations\n4. Risk stratification",
+            "required_fields": ["symptoms", "vitals", "history"]
+        }
+    },
+    "treatment": {
+        "plan_generation": {
+            "template": "Based on:\nDiagnosis: {diagnosis}\nPatient Profile: {patient_profile}\nMedical History: {history}\n\nGenerate a comprehensive treatment plan including:\n1. First-line treatments\n2. Alternative options\n3. Monitoring requirements\n4. Expected outcomes\n5. Follow-up schedule",
+            "considerations": [
+                "Evidence-based medicine",
+                "Patient-specific factors",
+                "Risk-benefit analysis"
+            ]
+        },
+        "medication_review": {
+            "template": "Review the following medication regimen:\nCurrent Medications: {medications}\nNew Prescription: {new_prescription}\n\nAnalyze for:\n1. Drug interactions\n2. Contraindications\n3. Dosing appropriateness\n4. Alternative recommendations",
+            "safety_checks": [
+                "Allergies",
+                "Contraindications",
+                "Drug interactions"
+            ]
+        }
+    },
+    "monitoring": {
+        "progress_tracking": {
+            "template": "Review patient progress:\nInitial Condition: {initial_state}\nCurrent Status: {current_state}\nTreatment Plan: {treatment_plan}\n\nAssess:\n1. Treatment effectiveness\n2. Symptom changes\n3. Adherence to plan\n4. Necessary adjustments",
+            "metrics": [
+                "Symptom severity",
+                "Functional status",
+                "Treatment response",
+                "Side effects"
+            ]
+        },
+        "health_metrics": {
+            "template": "Analyze health metrics:\nVital Signs: {vitals}\nLab Results: {lab_results}\nTrends: {historical_data}\n\nProvide:\n1. Key findings\n2. Trend analysis\n3. Risk assessment\n4. Recommendations",
+            "alert_thresholds": {
+                "blood_pressure": {"systolic": 140, "diastolic": 90},
+                "heart_rate": {"min": 60, "max": 100},
+                "temperature": {"max": 38.0}
+            }
+        }
+    },
+    "patient_education": {
+        "condition_explanation": {
+            "template": "Explain in patient-friendly terms:\nCondition: {condition}\nTreatment Plan: {treatment}\n\nInclude:\n1. Condition overview\n2. Treatment rationale\n3. Self-management steps\n4. Warning signs\n5. Lifestyle recommendations",
+            "language_level": "layperson",
+            "include_visuals": true
+        },
+        "lifestyle_recommendations": {
+            "template": "Based on your condition ({condition}) and health goals, here are personalized lifestyle recommendations:\n1. Diet modifications\n2. Exercise guidelines\n3. Stress management\n4. Sleep hygiene\n5. Preventive measures",
+            "customize_by": [
+                "age",
+                "condition",
+                "fitness_level",
+                "preferences"
+            ]
+        }
+    }
+}

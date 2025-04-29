@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Dashboard - Healthcare MCP{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Your Upcoming Appointments</h4>
+                <a href="{{ url_for('new_appointment') }}" class="btn btn-primary">Schedule New Appointment</a>
+            </div>
+            <div class="card-body">
+                {% if appointments %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>Doctor</th>
+                                    <th>Status</th>
+                                    <th>Notes</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for appointment in appointments %}
+                                    <tr>
+                                        <td>{{ appointment.datetime.strftime('%Y-%m-%d %H:%M') }}</td>
+                                        <td>Dr. {{ appointment.doctor.name }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ 'success' if appointment.status == 'completed' 
+                                                else 'warning' if appointment.status == 'scheduled' 
+                                                else 'danger' }}">
+                                                {{ appointment.status }}
+                                            </span>
+                                        </td>
+                                        <td>{{ appointment.notes or 'No notes' }}</td>
+                                        <td>
+                                            {% if appointment.status == 'scheduled' %}
+                                                <button class="btn btn-sm btn-danger">Cancel</button>
+                                                <button class="btn btn-sm btn-primary">Reschedule</button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-center">No upcoming appointments.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Symptom Analysis</h4>
+            </div>
+            <div class="card-body">
+                <form id="symptom-form">
+                    <div class="mb-3">
+                        <label for="symptoms" class="form-label">Enter your symptoms (one per line)</label>
+                        <textarea class="form-control" id="symptoms" rows="4" placeholder="Headache&#10;Fever&#10;Cough"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Analyze Symptoms</button>
+                </form>
+                <div id="analysis-result" class="mt-3" style="display: none;">
+                    <h5>Analysis Results:</h5>
+                    <div class="analysis-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Medical History</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h5>Recent Updates</h5>
+                    <ul class="list-group">
+                        {% if patient and patient.medical_history %}
+                            {% for entry in patient.medical_history.split('\n') %}
+                                <li class="list-group-item">{{ entry }}</li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="list-group-item">No medical history available.</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <a href="{{ url_for('medical_history') }}" class="btn btn-outline-primary">View Full History</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+document.getElementById('symptom-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const symptoms = document.getElementById('symptoms').value.split('\n').filter(s => s.trim());
+    const resultDiv = document.getElementById('analysis-result');
+    const contentDiv = resultDiv.querySelector('.analysis-content');
+    
+    resultDiv.style.display = 'block';
+    contentDiv.innerHTML = '<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>';
+    
+    try {
+        const response = await fetch('/analyze_symptoms', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ symptoms }),
+        });
+        
+        const data = await response.json();
+        contentDiv.innerHTML = `<div class="alert alert-info">${data.analysis}</div>`;
+    } catch (error) {
+        contentDiv.innerHTML = '<div class="alert alert-danger">Error analyzing symptoms. Please try again.</div>';
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}
